@@ -37,14 +37,50 @@ public class BinarySearch {
         if(middle*middle > num){
             return isPerfectSquareRecursive(num, left, middle-1);
         } else{
+            //comprobar si lo de abajo se podria poner tmb como isPerfectSquareRecursive(num, left, middle-1), ya que no 
+            //se en que caso se puede dar que middle sea <
             return isPerfectSquareRecursive(num, middle+1, right);
         }
     }
+
+    // O(√n) solution. They ask for the number of COMPLETED rows with n coins
+    public static int arrangeCoins(int n){
+        int res = 0;
+        int coinsRequired = 1;
+        while(n-coinsRequired>=0){
+            n -= coinsRequired;
+            coinsRequired ++;
+            res++;
+        }
+        return res;
+    }
+
+    //But for improving the performance, lets do binary search O(log n) https://youtu.be/5rHz_6s2Buw?si=xEUPv0FtVVFMJgoJ
+    public static int arrangeCoins2(int n) {
+        return arrangeCoinsRec(n, 0, n);
+    }
+
+    public static int arrangeCoinsRec(int n, int left, int right) {
+        if (left > right) return right;
+
+        int mid = left + (right - left) / 2;
+        long k = (long) mid * (mid + 1) / 2; // total coins needed for 'mid' rows
+
+        if (k == n) {
+            return mid;
+        } else if (k < n) {
+            return arrangeCoinsRec(n, mid + 1, right);
+        } else {
+            return arrangeCoinsRec(n, left, mid - 1);
+        }
+}
 
 
 public static void main (String[] args){
     List<Integer> array = List.of(1,2,3,4,5,6,13,16,17,20);
     System.out.println(binarySearch(1, array)); 
+    System.err.println(isPerfectSquare(555));
+
 }
     
 }
